@@ -1,0 +1,1 @@
+# rails-auto-docs
