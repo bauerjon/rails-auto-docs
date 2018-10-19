@@ -209,4 +209,79 @@ describe 'Blogs API' do
   end
 ```
 
+### rspec-rails-swagger
+
+https://github.com/fanta/rspec-rails-swagger
+
+```ruby
+require 'swagger_helper'
+
+# Paths Object
+RSpec.describe "Posts Controller", type: :request do
+  before { Post.new.save }
+
+  # Path Item Object
+  path '/posts' do
+    # Operation Object
+    operation "GET", summary: "fetch list" do
+      # Response Object
+      response 200, description: "successful"
+    end
+  end
+
+  # Path Object
+  path '/posts/{post_id}' do
+    # Parameter Object
+    parameter "post_id", {in: :path, type: :integer}
+    let(:post_id) { 1 }
+
+    # Operation Object
+    get summary: "fetch item" do
+      # Response Object
+      response 200, description: "success"
+    end
+  end
+```
+
+### Dictum
+
+https://github.com/Wolox/dictum
+
+
+### Dox
+
+
+```
+module Docs
+  module Pokemons
+    extend Dox::DSL::Syntax
+
+    document :api do # generates module Docs::Pokemons::Api
+      resource 'Pokemons' do
+        endpoint '/pokemons'
+        group 'Pokemons'
+      end
+    end
+
+    document :show do # generates module Docs::Pokemons::Show
+      action 'Get a pokemon'
+    end
+  end
+end
+
+RSpec.describe 'Pokemons', type: :request do
+  include Documentation::Pokemons::Api
+
+  let(:pikachu) { create(:pokemon) }
+
+  describe 'GET /pokemons/:id' do
+    include Documentation::Pokemons::Show
+
+    it 'gets a pokemon', :dox do
+      get pokemon_path(pikachu)
+      expect(response).to have_http_status(200)
+    end
+  end
+end
+```
 
