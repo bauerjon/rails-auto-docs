@@ -1,7 +1,7 @@
 # rails-auto-docs
 
 
-## Competitors
+## Alternatives
 
 ### apipie-rails
 
