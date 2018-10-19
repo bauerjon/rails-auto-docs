@@ -142,3 +142,71 @@ https://github.com/zipmark/rspec_api_documentation
     end
   end
   ```
+  
+  ### swagger-docs
+  
+  https://github.com/richhollis/swagger-docs
+  
+  ```ruby
+  class Api::V1::UsersController < ApplicationController
+  .....
+  # POST /users
+  swagger_api :create do
+    summary "To create user"
+    notes "Implementation notes, such as required params, example queries for apis are written here."
+    param :form, "user[name]", :string, :required, "Name of user"
+    param :form, "user[age]", :integer, :optional, "Age of user"
+    param_list :form, "user[status]", :string, :required, "Status of user, can be active or inactive"
+    response :success
+    response :unprocessable_entity
+    response :500, "Internal Error"
+  end
+  def create
+    @user = User.new(user_params)
+    if @user.save
+      render json: @user, status: :created
+    else
+      render json: @user.errors, status: :unprocessable_entity
+    end
+  end
+  .....
+end
+```
+
+### rswag
+
+https://github.com/domaindrivendev/rswag
+
+```ruby
+require 'swagger_helper'
+
+describe 'Blogs API' do
+
+  path '/blogs' do
+
+    post 'Creates a blog' do
+      tags 'Blogs'
+      consumes 'application/json', 'application/xml'
+      parameter name: :blog, in: :body, schema: {
+        type: :object,
+        properties: {
+          title: { type: :string },
+          content: { type: :string }
+        },
+        required: [ 'title', 'content' ]
+      }
+
+      response '201', 'blog created' do
+        let(:blog) { { title: 'foo', content: 'bar' } }
+        run_test!
+      end
+
+      response '422', 'invalid request' do
+        let(:blog) { { title: 'foo' } }
+        run_test!
+      end
+    end
+  end
+```
+
+
